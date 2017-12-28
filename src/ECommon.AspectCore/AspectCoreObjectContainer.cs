@@ -183,7 +183,16 @@ namespace ECommon.AspectCore
         /// <returns>True if a component providing the service is available.</returns>
         public bool TryResolve<TService>(out TService instance) where TService : class
         {
-            return _serviceResolver.ResolveRequired();
+            try
+            {
+                instance = _serviceResolver.ResolveRequired<TService>();
+                return true;
+            }
+            catch
+            {
+                instance = null;
+                return false;
+            }
         }
         /// <summary>Try to retrieve a service from the container.
         /// </summary>
@@ -192,7 +201,17 @@ namespace ECommon.AspectCore
         /// <returns>True if a component providing the service is available.</returns>
         public bool TryResolve(Type serviceType, out object instance)
         {
-            return _serviceResolver.TryResolve(serviceType, out instance);
+            try
+            {
+                instance = _serviceResolver.ResolveRequired(serviceType);
+                return true;
+            }
+            catch
+            {
+                instance = null;
+                return false;
+            }
+            // return _serviceResolver.TryResolve(serviceType, out instance);
         }
         /// <summary>Resolve a service.
         /// </summary>
